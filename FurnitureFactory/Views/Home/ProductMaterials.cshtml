@@ -1,0 +1,109 @@
+﻿
+@using FurnitureFactory.DBAgent;
+@using FurnitureFactory.Models;
+@{
+    ViewBag.Title = "ProductMaterials";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Настройка использования материалов в производстве</h2>
+<div class="row">
+    @using (Html.BeginForm("ProductMaterials", "Home", FormMethod.Get))
+    {
+        <p><input type="text" name="template" /></p>
+        <p><input type="submit" value="Поиск" class="btn btn-sm" /></p>
+    }
+</div>
+
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+        <th>Название товара</th>
+        <th>Материалы</th>
+        </th>
+        @foreach (var b in ViewBag.Products)
+            {
+            <tr>
+                <td>
+                    <p><b>@b.name</b></p>
+                    <p>Цена продажи: @b.price</p>
+                </td>
+                <td>
+                    <table class="table">
+                        <thead>
+                        <th>Название</th>
+                        <th>Количество</th>
+                        <th>Себестоимость</th>
+                        </thead>
+                        @using (DBAgent agent = new DBAgent())
+                        {
+                            List<Material> materials = agent.GetMaterials(b.ID);
+                                if (materials != null)
+                                {
+                                    foreach (var t in materials)
+                                    {
+                                        <tr>
+                                            <td><p>@t.name</p></td>
+                                            <td><p>@t.reserve</p></td>
+                                            @{ 
+                                                float cust = t.reserve * agent.GetMatCustPrice(t.ID);
+                                            }
+                                            <td><p>@cust</p></td>
+                                            <td>
+                                                @using(Html.BeginForm("DeleteProductMaterial","Home", FormMethod.Get))
+                                                {
+                                                    <input type="hidden" value="@t.ID" name="materialID" />
+                                                    <input type="hidden" value="@b.ID" name="productID" />
+                                                    <input type="submit" value="Удалить" />
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            <tr>
+                                @{ 
+                                    float salary = b.salary;
+                                    float prodCust = agent.GetProdCust(b.ID);
+                                    float sum = salary + prodCust;
+                                }
+                                <td>Себестоимость продукта:</td>
+                                <td>
+                                    <p>Оплата для рабочей группы:</p>
+                                    <p>@salary</p>
+                                </td>
+                                <td>
+                                    <p>Стоимость материалов:</p>
+                                    <p>@prodCust</p>
+                                </td>
+                                <td>
+                                    <p>=@sum</p>
+                                </td>
+                            </tr>
+                        }
+                        </table>
+                </td>
+                <td>
+                    <form method="post" action="/Home/NewProductMaterial">
+                        <input type="hidden" name="productID" value="@b.ID" />
+                        <p>
+                            <label for="materialID">Материал</label>
+                            <select name="materialID">
+                                @foreach (var t in ViewBag.materials)
+                                {
+                                    <option value="@t.ID">@t.name</option>
+                                }
+                            </select>
+                        </p>
+                        <p>
+                            <label for="number">Количество</label>
+                            <input type="number" name="number" />
+                        </p>
+                        <p><input type="submit" value="Добавить" /></p>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>

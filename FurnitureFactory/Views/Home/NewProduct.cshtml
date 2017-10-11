@@ -1,0 +1,65 @@
+﻿@using FurnitureFactory.Models;
+@using FurnitureFactory.DBAgent;
+
+@{
+    ViewBag.Title = "Создание/Изменение продукта";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string method = "NewProduct";
+    Product product;
+    if (ViewBag.product != null)
+    {
+        product = ViewBag.product;
+        product.ID = ViewBag.ID;
+    }
+    else
+    {
+        product = new Product
+        {
+            ID = null,
+            name = null,
+            price = null,
+            categoryID = null,
+            salary = null
+        };
+    }
+}
+
+<div class="row">
+    <div class="col-md-5">
+        @if (ViewBag.method != null)
+            {
+                method = ViewBag.method;
+            }
+        @using (Html.BeginForm(method, "Home"))
+        {
+            if (product.ID != null)
+            {
+                <input type="hidden" name="ID" value="@product.ID" />
+
+            }
+            <p><label for="name">Название продукта</label>
+            <input type="text" name="name" value="@product.name" /></p>
+            <p><label for="price">Цена</label>
+            <input type="number" name="price" value="@product.price" /></p>
+            <p><label for="categoryID">Категория товара</label>
+            <select name="categoryID">
+                <option value="null"></option>
+                @foreach (var b in ViewBag.categories)
+                {
+                    if (b.ID == product.categoryID)
+                    {
+                        <option selected value="@b.ID">@b.name</option>
+                    }
+                    else
+                    {
+                        <option value="@b.ID">@b.name</option>
+                    }
+                }
+            </select></p>
+            <p><label for="salary">Оплата рабочей группе</label>
+            <input type="number" name="salary" value="@product.salary" /></p>
+            <p><input type="submit" value="Добавить" /></p>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Мебель";
+}
+@model FurnitureFactory.Models.Product
+
+<div class="jumbotron">
+    <h1>Мебель для дома</h1>
+    <p class="lead">Интернет-магазин домашней и офисной мебели от фабрики "Кедр"</p>
+</div>
+
+<div class="row">
+    
+    <div class="col">
+        <h2>Продукция</h2>
+        <h4>@Html.ActionLink("Добавить продукт","NewProduct")</h4>
+        <h4>@Html.ActionLink("Настройка использования материалов","ProductMaterials")</h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Название товара</th>
+                <th>Цена</th>
+                <th>Категория</th>
+                <th>Оплата рабочей группе</th>
+            </thead>
+            @foreach (var b in ViewBag.Products)
+            {
+                <tr>
+                    <td><p>@b.ID</p></td>
+                    <td><p>@b.name</p></td>
+                    <td><p>@b.price</p></td>
+                    <td><p>@b.category</p></td>
+                    <td><p>@b.salary</p></td>
+                    <td><p><a href="/Home/DeleteProduct/@b.ID">удалить</a></p></td>
+                    <td>
+                        <p>
+                            @using (Html.BeginForm("EditProduct", "Home", FormMethod.Get))
+                            {
+                                <input type="hidden" value="@b.ID" name="ID" />
+                                <input type="hidden" value="@b.name" name="name" />
+                                <input type="hidden" value="@b.price" name="price" />
+                                <input type="hidden" value="@b.categoryID" name="categoryID" />
+                                <input type="hidden" value="@b.salary" name="salary" />
+                                <input type="submit" value="изменить" class="active" />
+                            }
+                        </p>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

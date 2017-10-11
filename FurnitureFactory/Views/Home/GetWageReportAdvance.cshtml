@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Отчет по заработной плате";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+                <th>Рабочий</th>
+                <th>Дата</th>
+                <th>Получил</th>
+            </thead>
+            @foreach (var b in ViewBag.wages)
+            {
+                <tr>
+                    <td><p>@b.employee.name</p></td>
+                    <td><p>@b.date</p></td>
+                    <td>
+                        <p>
+                            @if (b.wage > 0)
+                            {
+                                <font color="green">@b.wage</font>
+                            }
+                            else
+                            {
+                                <font color="red">@b.wage</font>
+                            }
+                        </p>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <div class="row">
+            @using (Html.BeginForm("GetWageReportAdvance", "Home", FormMethod.Post))
+            {
+                <h4>Фильтр по дате</h4>
+                <p>
+                    <label for="startDate">с:</label>
+                    <input type="date" name="startDate" />
+                </p>
+                <p>
+                    <label for="endDate">по:</label>
+                    <input type="date" name="endDate" />
+                </p>
+                <p><input type="submit" value="Фильтровать" /></p>
+            }
+        </div>
+    </div>
+</div>

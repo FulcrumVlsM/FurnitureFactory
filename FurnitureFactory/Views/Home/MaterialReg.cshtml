@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "MaterialReg";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Учет использования материалов</h2>
+
+<div class="row">
+    @using (Html.BeginForm("MaterialReg", "Home", FormMethod.Get))
+    {
+        <p>
+            <input type="text" name="template" />
+        </p>
+        <p><input type="submit" value="Поиск" /></p>
+    }
+</div>
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+        <th>Название продукта</th>
+        <th>Изменение количества</th>
+        <th>Дата</th>
+        <th>Стоимость покупки</th>
+        </th>
+        @foreach (var b in ViewBag.material_reg)
+            {
+            <tr>
+                <td><p>@b.name</p></td>
+                @if (b.number > 0)
+                {
+                    <td><p><font color="green">@b.number</font></p></td>
+                }
+                else
+                {
+                    <td><p><font color="red">@b.number</font></p></td>
+                }
+                <td><p>@b.date</p></td>
+                <td><p>@b.money</p></td>
+            </tr>
+        }
+    </table>
+
+</div>
+

@@ -1,0 +1,61 @@
+﻿@using FurnitureFactory.DBAgent
+@{
+    ViewBag.Title = "Материалы";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Материалы</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Название продукта</th>
+            <th>Запас на складе</th>
+            <th>Себестоимость</th>
+            </thead>
+            @using (DBAgent agent = new DBAgent())
+            {
+                if (ViewBag.materials != null)
+                {
+                    foreach (var b in ViewBag.materials)
+                    {
+                        <tr>
+                            <td><p>@b.ID</p></td>
+                            <td><p>@b.name</p></td>
+                            <td><p>@b.reserve</p></td>
+                            <td><p>@agent.GetMatCustPrice(b.ID)</p></td>
+                            <td><p><a href="/Home/DeleteMaterial/@b.ID">удалить</a></p></td>
+                            @using (Html.BeginForm("PurchaseMaterial", "Home", FormMethod.Post))
+                        {
+                                <td>
+                                    <h4>Купить материал</h4>
+                                    <input type="hidden" name="materialID" value="@b.ID" />
+                                    <p>
+                                        <label for="price_of_one">Цена за единицу</label>
+                                        <input type="number" name="price_of_one" />
+                                    </p>
+                                    <p>
+                                        <label for="addNumber">Количество</label>
+                                        <input type="number" name="addNumber" />
+                                    </p>
+                                    <p><input type="submit" value="Купить" /></p>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            }
+        </table>
+
+    </div>
+
+    <div class="col-md-4">
+        @using (Html.BeginForm("Materials", "Home", FormMethod.Get))
+        {
+            <p><input type="text" name="template" /></p>
+            <p><input type="submit" value="Поиск" /></p>
+        }
+    </div>
+</div>

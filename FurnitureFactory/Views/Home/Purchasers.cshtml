@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Покупатели";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Покупатели</h2>
+<h4>@Html.ActionLink("Новый покупатель","NewPurchaser")</h4>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Покупатель</th>
+            <th>Email</th>
+            <th>Номер телефона</th>
+            <th>Заказов в обработке:</th>
+            </thead>
+            @foreach (var b in ViewBag.purchasers)
+            {
+                <tr>
+                    <td><p>@b.ID</p></td>
+                    <td><p>@b.name</p></td>
+                    <td><p>@b.email</p></td>
+                    <td><p>@b.tel_number</p></td>
+                    <td><p>@b.OrderCount</p></td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

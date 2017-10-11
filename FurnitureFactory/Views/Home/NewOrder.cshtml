@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "NewOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <h2>Регистрация нового заказа</h2>
+        @using (Html.BeginForm("NewOrder", "Home", FormMethod.Post))
+        {
+            <p>
+                <label for="productID">Продукция</label>
+                <select name="productID">
+                    <option value="null"></option>
+                    @foreach (var b in ViewBag.products)
+                {
+                        <option value="@b.ID">@b.name</option>
+                    }
+                </select>
+            </p>
+
+            <p>
+                <label for="purchaserID">Покупатель</label>
+                <select name="purchaserID">
+                    <option value="null"></option>
+                    @foreach (var b in ViewBag.purchasers)
+                {
+                        <option value="@b.ID">@b.name</option>
+                    }
+                </select>
+            </p>
+            <p><input type="number" name="number" /></p>
+
+            <p><input type="submit" value="Добавить" /></p>
+        }
+    </div>
+</div>
+

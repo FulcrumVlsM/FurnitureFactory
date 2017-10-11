@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Money";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Финансовый отчет</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <th>Дата</th>
+            <th>Доход/Расход</th>
+            <th>Пометка</th>
+            </thead>
+            @foreach (var b in ViewBag.money)
+            {
+                <tr>
+                    <td><p>@b.date</p></td>
+                    <td><p>
+                        @if (b.change > 0)
+                        {
+                            <font color="green">@b.change</font>
+                        }
+                        else
+                        {
+                            <font color="red">@b.change</font>
+                        }
+                    </p></td>
+                    <td><p>@b.note</p></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <div class="row">
+            <h4>Текущий баланс: <font color="green">@ViewBag.amount</font> сом</h4>
+        </div>
+        <div class="row">
+            @using (Html.BeginForm("Money", "Home", FormMethod.Post))
+            {
+                <h4>Фильтр по дате</h4>
+                <p>
+                    <label for="startDate">с:</label>
+                    <input type="date" name="startDate" />
+                </p>
+                <p>
+                    <label for="endDate">по:</label>
+                    <input type="date" name="endDate" />
+                </p>
+                <p><input type="submit" value="Фильтровать" /></p>
+            }
+        </div>
+        <div class="row">
+            @using (Html.BeginForm("NewMoneyEntry", "Home", FormMethod.Post))
+            {
+                <h4>Добавить запись</h4>
+                <p>
+                    <label for="change">Доход:</label>
+                    <input type="number" name="change" />
+                </p>
+                <p>
+                    <label for="note">Пометка</label>
+                    <input type="text" name="note" />
+                </p>
+                <p>
+                    <input type="submit" class="btn btn-block" value="Добавить" />
+                </p>
+            }
+        </div>
+    </div>
+</div>
+

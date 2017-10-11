@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "EditEmployee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Изменить данные сотрудника</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        @using (Html.BeginForm("EditEmployee", "Home"))
+        {
+            <p>
+                <label for="name">Имя сотрудника</label>
+                <input type="text" name="name" value="@ViewBag.employee.name" />
+            </p>
+            <p>
+                <label for="workgroupID">Рабочая группа</label>
+                <select name="workgroupID">
+                    @foreach(var b in ViewBag.workgroups)
+                    {
+                        if (b.ID == ViewBag.employee.ID)
+                        {
+                            <option value="@b.ID" selected>@b.name</option>
+                        }
+                        else
+                        {
+                            <option value="@b.ID">@b.name</option>
+                        }
+                    }
+                </select>
+            </p>
+            <p>
+                <label for="modificator">Модификатор ЗП</label>
+                <input type="text" name="modificator" value="@ViewBag.employee.modificator" />
+            </p>
+            <input type="hidden" name="ID" value="@ViewBag.employee.ID" />
+            <p><input type="submit" value="Изменить" /></p>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Wages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Отчет о полученной зарплате</h2>
+<h4>@Html.ActionLink("Расширенный отчет","GetWageReportAdvance")</h4>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <th>Имя сотрудника</th>
+            <th>Рабочая группа</th>
+            <th>Зарплата</th>
+            </thead>
+            @if (ViewBag.wages != null)
+            {
+                foreach (var b in ViewBag.wages)
+                {
+                    <tr>
+                        <td><p>@b.employee.name</p></td>
+                        <td><p>@b.workgroup.name</p></td>
+                        <td><p>@b.wage</p></td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <div class="col-md-4">
+        @using (Html.BeginForm("Wages", "Home", FormMethod.Post))
+        {
+            <label for="startDate">с:</label>
+            <input type="date" name="startDate" value="@DateTime.Now.AddMonths(-1)" />
+            <label for="endDate">по:</label>
+            <input type="date" name="endDate" value="@DateTime.Now" />
+            <input type="submit" value="Показать" />
+        }
+    </div>
+</div>
+

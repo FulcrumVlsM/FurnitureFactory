@@ -1,0 +1,108 @@
+﻿@using FurnitureFactory.DBAgent;
+
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="jumbotron">
+    <h1>Мебель для дома</h1>
+    <p class="lead">Интернет-магазин домашней и офисной мебели от фабрики "Кедр"</p>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>Заказы</h2>
+        <h3>@Html.ActionLink("Новый заказ","NewOrder")</h3>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Название продукта</th>
+                <th>Покупатель</th>
+                <th>Цена</th>
+                <th>Дата</th>
+                <th>Количество</th>
+                <th>Состояние</th>
+            </thead>
+            @foreach (var b in ViewBag.Orders)
+            {
+                <tr>
+                    <td><p>@b.ID</p></td>
+                    <td><p>@b.product</p></td>
+                    <td><p>@b.purchaser</p></td>
+                    <td><p>@b.price</p></td>
+                    <td><p>@b.date</p></td>
+                    <td><p>@b.number</p></td>
+                        @if (b.state)
+                        {
+                            <td><p>завершен</p></td>
+                        }
+                        else
+                        {
+                            bool res;
+                            using (DBAgent agent = new DBAgent())
+                            {
+                                res = agent.CheckWorkgroupOnOrder(b.ID);
+                            }
+                            if (res)
+                            {
+                                <td><p><a href="/Home/CompleteOrder/@b.ID">завершить</a></p></td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <form action="/Home/SetWorkgroup" method="post">
+                                        <input type="hidden" name="orderID" value="@b.ID" />
+                                        <p>
+                                            <label for="workgroupID">Рабочая группа</label>
+                                            <select name="workgroupID">
+                                                @foreach (var t in ViewBag.workgroups)
+                                                {
+                                                    <option value="@t.ID">@t.name</option>
+                                                }
+                                            </select>
+                                        </p>
+                                        <p><input type="submit" value="Назначить" /></p>
+                                    </form>
+                                </td>
+                            }
+                        }
+                </tr>
+                }
+        </table>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            @using (Html.BeginForm("Orders", "Home", FormMethod.Post))
+            {
+                <p>
+                    <label for="productID">Продукт</label>
+                    <select name="productID">
+                        <option value="null"></option>
+                        @foreach (var b in ViewBag.products)
+                        {
+                            <option value="@b.ID">@b.name</option>
+                        }
+                    </select>
+
+                </p>
+                <label for="purchaserID">Покупатель</label>
+                <select name="purchaser">
+                    <option value="null"></option>
+                    @foreach (var b in ViewBag.purchasers)
+                {
+                        <option value="@b.ID">@b.name</option>
+                    }
+                </select>
+                <label for="startDate">с:</label>
+                <input type="date" name="startDate" value="01.01.2017" />
+                <label for="productID">по:</label>
+                <input type="date" name="endDate" value="@DateTime.Today" />
+
+                <input type="submit" value="Фильтровать" />
+            }
+        </div>
+
+    </div>
+</div>

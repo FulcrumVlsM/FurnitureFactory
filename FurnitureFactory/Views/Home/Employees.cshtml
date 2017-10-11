@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Employees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Сотрудники</h2>
+<h4>@Html.ActionLink("Заработная плата", "Wages", "Home")</h4>
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Имя сотрудника</th>
+            <th>Рабочая группа</th>
+            <th>Модификатор расчета оплаты</th>
+            </thead>
+            @foreach (var b in ViewBag.employees)
+            {
+                <tr>
+                    <td><p>@b.ID</p></td>
+                    <td><p>@b.name</p></td>
+                    <td><p>@b.workgroup</p></td>
+                    <td><p>@b.modificator</p></td>
+                    <td><p><a href="/Home/EditEmployee/@b.ID">изменить</a></p></td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            @using (Html.BeginForm("Employees", "Home", FormMethod.Post))
+            {
+                <p>
+                    <label for="workgroup">Рабочая группа</label>
+                    <select name="workgroup">
+                        <option value="null"></option>
+                        @foreach (var b in ViewBag.workgroups)
+                        {
+                            <option value="@b.ID">@b.name</option>
+                        }
+                    </select>
+                </p>
+
+                <input type="submit" value="Фильтровать" />
+            }
+        </div>
+        <div class="row">
+            @using (Html.BeginForm("NewEmployee", "Home", FormMethod.Post))
+            {
+                <p>
+                    <label for="name">Имя сотрудника</label>
+                    <input type="text" name="name" />
+                </p>
+                <p>
+                    <label for="workgroup">Рабочая группа</label>
+                    <select name="workgroup">
+                        <option value="null"></option>
+                        @foreach(var t in ViewBag.workgroups)
+                        {
+                            <option value="@t.ID">@t.name</option>
+                        }
+                    </select>
+                </p>
+                <p>
+                    <label for="modificator">Модификатор зарабатной платы</label>
+                    <input type="text" name="modificator" />
+                </p>
+                <p><input type="submit" value="Добавить" class="btn btn-danger" /></p>
+            }
+        </div>
+    </div>
+</div>
+
